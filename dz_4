@@ -1,0 +1,229 @@
+Домашнее задание 4
+
+# Задание-1:
+# Дан список, заполненный произвольными целыми числами.
+# Получить новый список, элементы которого будут
+# квадратами элементов исходного списка
+# [1, 2, 4, 0] --> [1, 4, 16, 0]
+
+from random import randint
+
+list=[]
+n=int(input('Введите число элементов'))
+[list.append(randint(1,10)) for i in range(n)]
+new_list = [i**2 for i in list]
+print(f'Исходный список:{list}')
+print(f'Новый список:{new_list}')
+	
+
+# Задание-2:
+# Даны два списка фруктов.
+# Получить список фруктов, присутствующих в обоих исходных списках.
+
+list1 = ["яблоко", "банан",'кокос' ,"киви", "арбуз"]
+list2 = ['ананас','арбуз','банан','апельсин','дыня','киви']
+
+#1
+new_list = [i for i in list1 and list2 if i in list1 and list2]
+print(new_list)
+
+#2
+new_list = [i for i in list1 if i in list2]
+print(new_list)
+
+
+# Задание-3:
+# Дан список, заполненный произвольными числами.
+# Получить список из элементов исходного, удовлетворяющих следующим условиям:
+# + Элемент кратен 3
+# + Элемент положительный
+# + Элемент не кратен 4
+
+from random import randint
+
+list=[]
+n=int(input('Введите число элементов'))
+[list.append(randint(-10,10)) for i in range(n)]
+new_list = [i for i in list if i%3 ==0 and i>0 and i%4!=0]
+print(f'Исходный список:{list}')
+print(f'Новый список:{new_list}')
+
+
+
+# Задание-3
+# Пользователь вводит положительное целое число больше 1
+# Нужно создать квадратную матрицу этого размера и по спирали заполнить её числами
+
+# 5
+#  1  2  3  4 5
+# 16 17 18 19 6
+# 15 24 25 20 7
+# 14 23 22 21 8
+# 13 12 11 10 9
+
+# 3
+# 1 2 3
+# 8 9 4
+# 7 6 5
+
+def pretty_print_matrix(matr, width):
+    for row in matr:
+        for elem in row:
+            print(f"{elem:{width}} ", end="")
+        print()
+
+
+n = int(input("Input n: "))
+
+count = 1
+matr = []
+
+for i in range(n):
+    matr.append([0] * n)
+
+for i in range(n // 2):
+    for j in range(i, n - 1 - i):
+        matr[i][j] = count
+        count += 1
+
+    for j in range(i, n - 1- i):
+        matr[j][n - 1 - i] = count
+        count += 1
+
+    for j in range(n - 1 - i, i, -1):
+        matr[n - 1 - i][j] = count
+        count += 1
+
+    for j in range(n - 1 - i, i, -1):
+        matr[j][i] = count
+        count += 1
+
+if n % 2 == 1:
+    matr[n // 2][n // 2] = count
+
+pretty_print_matrix(matr, 3)
+
+# Задание-1:
+# Напишите скрипт, заполняющий указанный файл (самостоятельно задайте имя файла)
+# произвольными целыми цифрами, в результате в файле должно быть
+# 2500-значное произвольное число.
+# Найдите и выведите самую длинную последовательность одинаковых цифр
+# в вышезаполненном файле.
+
+#1
+from random import randint
+
+def get_random_numbers(lenght):
+    nums = []
+    for i in range(lenght):
+        nums.append(str(randint(0,9)))
+    if nums[0] == 0:
+        nums[0] = str(randint(0,9))
+    return ''.join(nums)
+
+
+def get_longest_sequence(numbers):
+    max_sequence = 0
+    max_sequence_number = None
+    last = 0
+    count = 0
+    for num in numbers:
+        if last == num:
+            count += 1
+        else:
+            count = 1
+
+            if count > max_sequence:
+                max_sequence = count
+                max_sequence_number = last
+
+            last = num
+    return max_sequence,max_sequence_number
+
+with open('nums.txt','w') as f:
+    nums = get_random_numbers(2500)
+    f.write(nums)
+    print('Cамая длинная последовательность',get_longest_sequence(nums))	
+	
+# Задание-2
+# Сформировать квадратную матрицу, в каждой строке которой находится ровно один ноль на случайном месте,
+# остальные элементы тоже рандомные. Пользователь вводит размер
+
+from random import randint
+n = int(input('Введите размер'))
+a=[[(randint(0,100))for i in range (n)] for j in range(n)]
+for row in a:
+    row[randint(0,n-1)] = 0
+for row in a:
+    for element in row:
+        print(f"{element:2}", end=" ")
+    print()
+
+# Задание-2
+# Дан pwd.txt с логинами и паролями. Найдите топ10 самых популярных паролей.
+
+def parse_passwords(data):
+    res = []
+    for i in data.split('\n'):
+        res.append(i.split(';')[1])
+    return (res)
+
+def count_passwords(passwords):
+    passwords_count = dict()
+    for p in passwords:
+        if p in passwords_count:
+            passwords_count[p] +=1
+        else:
+            passwords_count[p] = 1
+    return passwords_count
+
+def sort_by_values(dictionary):
+    return sorted(dictionary.items(),key = lambda x: x[1],reverse=True )
+
+filename = input('Введите имя файла')
+top = int(input('Введите ТОП'))
+
+with open (filename) as f:
+    d = sort_by_values(count_passwords(parse_passwords(f.read())))
+    for i in d[:top]:
+        print(i)
+
+# Задание-1
+# Куб состоит из n^3 прозрачных и непрозрачных элементарных кубиков. Имеется ли хотя бы один просвет по каждому из трех измерений?
+# Если это так, вывести координаты каждого просвета. Куб задается трехмерной матрицей из 0 и 1.
+import random
+
+N = int(input("Input size: "))
+
+cube = [[[random.randint(0, 1) for k in range(N)] for j in range(N)] for i in range(N)]
+
+import pprint
+
+pprint.pprint(cube)
+
+empty_row = [0]*N
+
+#Просвет по строкам
+for matr in cube:
+    for row in matr:
+        if row == empty_row:
+            pass
+
+#Просвет по столбцам
+for matr in cube:
+    for i in range(N):
+        buf = []
+        for j in range(N):
+            buf.append(matr[j][i])
+        if buf == empty_row:
+            pass
+
+#Просвет в глубину
+
+for i in range(N):
+    for j in range(N):
+        buf = []
+        for height in range(N):
+            buf.append(cube[height][i][j])
+        if buf == empty_row:
+            pass
