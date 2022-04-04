@@ -125,3 +125,71 @@ a, b = 0, 1
 for i in range(n, m+1):
     a, b = b, a + b
     print(a+b)
+    
+    
+# Задание-1
+
+# Написать консольное меню вида:
+
+# 1. Добавить
+# 2. Удалить
+# 3. Распечатать
+# 4. Посчитать
+# 5. Выйти
+
+# Надо чтобы
+# а) Можно было удобно менять порядок меню и\или добавлять\удалять пункты меню
+# б) Каждое действие (добавить, удалить и тд) должно быть функцией
+# в) У пользователя надо спросить номер команды
+# г) Программа не должна завершаться пока не введется команда Выйти
+# д) Проверять на ввод ошибочных данных, там где они могут появиться
+
+
+def print_menu(menu):
+    for i, key in enumerate(menu, start=1):
+        print(f"{i}. {key}")
+
+
+def get_command(limit):
+    command = int(input("Input command: "))
+    if 1 <= command <= limit:
+        return command
+
+
+def add():
+    print("adding")
+
+
+def delete():
+    print("delete")
+
+
+def show():
+    print("show")
+
+
+def count():
+    print("count")
+
+
+def finish():
+    exit(0)
+
+
+menu = {
+    "Delete": delete,
+    "Count": count,
+    "Add": add,
+    "Show": show,
+    "Finish": finish,
+}
+
+
+while True:
+    print_menu(menu)
+    command = get_command(len(menu))
+    if command is not None:
+        key = list(menu.keys())[command - 1]
+        menu[key]()
+    else:
+        print("Wrong command!")
