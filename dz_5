@@ -1,0 +1,124 @@
+# Задача-1:
+# Напишите скрипт, создающий директории dir_1 - dir_9 в папке,
+# из которой запущен данный скрипт.
+# И второй скрипт, удаляющий эти папки.
+import os
+import shutil
+def directory_creation(name,count):
+    for i in range (1,count+1):
+        if not os.path.exists(name):
+            os.mkdir(f'{name}_{i}')
+directory_creation('dir',10)
+
+def directory_deleting(name,count):
+    for i in range (1,count+1):
+        if os.path.exists(name):
+            os.remove(f'{name}_{i}')
+directory_deleting('dir',10)
+
+
+def remove_empty_dirs(name, count):
+    for i in range(1, count+1):
+        if os.path.exists(name):
+            os.rmdir(f"{name}_{i}")
+remove_empty_dirs('dir',10)
+
+def remove_dirs_recursively(name, count):
+    for i in range(1, count+1):
+        if os.path.exists(name):
+            shutil.rmtree(f"{name}_{i}")
+remove_dirs_recursively('dir', 10)
+
+# Задача-2:
+# Напишите скрипт, отображающий папки текущей директории.
+
+def get_files(path):
+    return os.listdir(path)
+print(get_files())
+
+# Задача-3:
+# Напишите скрипт, создающий копию файла, из которого запущен данный скрипт.
+
+def copy_current_file(prefix):
+    buf = (os.path.splitext(__file__))
+    new_copy_file = (f'{buf[0]}{prefix}{buf[1]}')
+    shutil.copyfile(__file__,new_copy_file)
+
+copy_current_file('_copy')
+#
+# NORMAL
+
+# Задача-1:
+# Напишите небольшую консольную утилиту,
+# позволяющую работать с папками текущей директории.
+# Утилита должна иметь меню выбора действия, в котором будут пункты:
+# 1. Перейти в папку
+# 2. Просмотреть указанной папки
+# 3. Удалить папку
+# 4. Создать папку
+# При выборе любых пунктов печатается статус "Успешно создано/удалено/перешел", "Невозможно создать/удалить/перейти"
+
+# Для решения данной задачи используйте алгоритмы из задания easy,
+# оформленные в виде соответствующих функций,
+# и импортированные в данный файл из easy.py
+
+
+# 1. Перейти в папку
+def change_directory(path):
+    return os.chdir(path)
+
+# 2. Просмотреть указанную папку
+def get_files(path):
+    return os.listdir(path)
+
+# 3. Удалить папку
+def directory_deleting(name):
+    if os.path.exists(name):
+        os.rmdir(name)
+
+# 4. Создать папку
+def directory_creation(name):
+    if not os.path.exists(name):
+        os.mkdir(name)
+
+
+print('[1] - перейти в папку')
+print('[2] - просмотреть папку')
+print('[3] - удалить папку')
+print('[4] - создать папку')
+
+do = int(input('Выберите действие'))
+if do == 1:
+    path = input('Введите путь')
+    change_directory(path)
+    print('Успешно перешел в директорию' ,os.getcwd())
+elif do == 2:
+    path = input('Введите путь')
+    print('Список файлов:',get_files(path))
+elif do == 3:
+    name = input('Введите название папки')
+    os.rmdir(name)
+    print('Папка успешно удалена')
+else:
+    print('Невозможно удалить,папки не существует')
+elif do == 4:
+    name = input('Введите название папки')
+    os.mkdir(name)
+    print('Папка успешно создана')
+else:
+    print('Невозможно создать, папка уже существует')
+    
+HARD
+
+# Задание-1
+# 
+# Написать программу для распаковки файлов в корневую из всех папок с расширениями (код взять с урока) и папки удалить    
+import os
+
+BASE_DIR = r'C:\Users\Julia\Downloads'
+files = os.listdir(BASE_DIR)
+extensions_dirs = set([file for file in files if os.path.isdir(os.path.join(BASE_DIR,file))])
+for ext in extensions_dirs:
+    for file in os.listdir(os.path.join(BASE_DIR,ext)):
+        os.rename(os.path.join(BASE_DIR, ext,file), os.path.join(BASE_DIR,file))
+    os.rmdir(os.path.join(BASE_DIR,ext))    
