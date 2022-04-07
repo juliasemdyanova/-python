@@ -1,0 +1,162 @@
+# Задача-1:
+#
+# Создать класс треугольник и реализовать в нем конструктор, методы для площади, периметра и вывод на экран.
+# В конструкторе сделать проверку на возможность создания такого треугольника, если нет, то написать, что такой треугольник нельзя создать и сделать exit(1)
+
+
+class Point:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def get_length(self, other):
+        return ((self.x - other.x) ** 2 + (self.y - other.y) ** 2) ** 0.5
+
+
+class Triangle:
+
+    def __init__(self, a, b, c):
+        if not self.is_triangle(a, b, c):
+            exit(1)
+
+        self.a = a
+        self.b = b
+        self.c = c
+
+    @staticmethod
+    def is_triangle(a, b, c):
+        return a + b + c >= 2 * max(a, b, c)
+
+    def perimeter(self):
+        return sum([self.a, self.b, self.c])
+
+    def area(self):
+        hp = self.perimeter() / 2
+        return (hp * (hp - self.a) * (hp - self.b) * (hp - self.c)) ** 0.5
+
+    def print(self):
+        return f"Triangle(a={self.a}, b={self.b}, c={self.c})"
+
+
+a, b, c = Point(0, 3), Point(4, 0), Point(3, 4)
+
+T = Triangle(a.get_length(b), b.get_length(c), c.get_length(a))
+
+print(T.print())	
+
+
+# Класс для работы со светофором
+import time
+
+class Light:
+    def __init__(self,color,timeout):
+        self.color = color
+        self.timeout = timeout
+
+
+UP = 1
+DOWN = -1
+
+class TrafficLightsEmptyException(Exception):
+    def __init__(self,msg):
+       super().__init__(msg)
+
+class TrafficLights:
+    def __init__(self,lights:list):
+        if len(lights) ==0:
+            raise TrafficLightsEmptyException('Can t be empty')
+
+        self.lights = lights.copy()
+        self.current = 0
+        self.direction = DOWN
+
+    def next_light(self):
+        res = self.lights[self.current]
+        self.current += self.direction
+        if not (0<=self.current<len(self.lights)):
+            self.current-=2 * self.direction
+            self.direction = -self.direction
+        return res
+
+traf = TrafficLights([Light('red',1),Light('yellow',2),Light('green',3)])
+
+while True:
+    light = traf.next_light()
+    print(light.color)
+    time.sleep(light.timeout)
+	
+	
+# Задание-2: не обязательно
+#
+# Написать консольную РПГ игру...
+# Пример:
+
+# <Характеристики персонажа>   <Характеристики врага>
+# (HP, MP, Power, Defense)
+#
+# <Выбор действий>
+# (Атаковать, Лечиться, .....)
+
+class Person:
+    def __init__(self, stats):
+        self.hp = stats["hp"]
+        self.mp = stats["mp"]
+        self.power = stats['power']
+        self.defense = stats['defense']
+        self.speed = stats['speed']
+
+    def get_stats_info(self):
+        return ""
+
+    def is_died(self):
+        return self.hp <= 0
+
+
+class Hero(Person):
+
+    def __init__(self, stats):
+        super().__init__(stats)
+        self.exp_current = 0
+        self.exp_to_next_level = 100
+        self.level = 1
+
+
+class Enemy:
+
+    def __init__(self, stats, gain_exp=100):
+        super().__init__(stats)
+        self.gain_exp = gain_exp
+
+
+class Battle:
+
+    def __init__(self, hero, enemy):
+        self.hero = hero
+        self.enemy = enemy
+
+    def start(self):
+        while self.someone_died():
+            self.print_stats()
+            self.print_menu()
+            command = self.get_command()
+            self.commands[command]()
+
+    def someone_died(self):
+        return self.hero.is_died() or self.enemy.is_died()
+
+
+battle = Battle( Hero(10,10,10), Enemy(10,10,10) )
+
+battle.start()
+#
+#     #while someone_alive():
+#         #print_stats()
+#         #print_menu()
+#         #get command()
+#         #do action
+
+
+h = Hero({
+    "hp": 12,
+    #'.....'
+})	
