@@ -110,8 +110,46 @@ print(res)
 # 2. Сколько букв английского алфавита в тексте?
 
 
-words=set((str(i) for i in input().split()))
-print('Количество слов в тексте:',len(words))
+import string
+
+def delete_all_punctuations(s):
+    for i in string.punctuation:
+        s = s.replace(i,'')
+    return s
+
+def delete_all_not_english_letters(s):
+    for i in s:
+        if i not in string.ascii_letters:
+            s = s.replace(i,'')
+    return s
+
+def trim(s):
+    return s.strip()
+
+def delete_all_double_spaces():
+    while "  " in s:
+        s = s.replace("  ", " ")
+    return s
+
+def get_text():
+    return input('Input text:')
+
+def to_lower(s):
+    return s.lower()
+
+def get_statistics(words):
+    count = dict()
+    for word in words:
+        if word in count:
+            count[word] += 1
+        else:
+            count[word] = 1
+    print(count)
+
+s = to_lower(delete_all_not_english_letters(delete_all_double_spaces()(delete_all_punctuations(get_text()))))
+
+count = get_statistics(s.split(' '))
+count_letters = get_statistics(s)
 
 # Задача-2 Пользователь вводит два текста, необходимо найти все слова, которые есть в обоих текстах. Без учета регистра.
 text1=(set(str(i) for i in input().split()))
