@@ -158,3 +158,40 @@ print(text1.intersection(text2))
 
 she sells sea shells on the sea shore
 the shells that she sells are sea shells I'm sure
+
+# Есть два словаря. Один это рецепт блюда, второй это список продуктов, которые есть в ходильнике.
+#
+# Ключ это название продукта, значение - это количество.
+#
+# Нужно сравнить два словаря и дать словарь, в котором будет список покупок
+# Если для рецепта всё есть, то сказать что ничего не нужно
+# Разницей по измерению гр, мл, шт. Пренебречь
+
+import pprint
+recipe = {
+    "Молоко": 100,
+    "Яйца": 10,
+    "Мука": 300
+
+}
+
+
+products = {
+    "Сыр": 10,
+    "Яйца": 70,
+     'Молоко': 200,
+     "Мука": 300
+}
+
+bucket = dict()
+
+for k,v in recipe.items():
+    if k in products:
+        if v - products[k] > 0:
+            bucket[k] = v - products[k]
+    else:
+        bucket[k] = v
+if len(bucket) > 0:
+    pprint.pprint(bucket)
+else:
+    print('Для рецепта все есть')
